@@ -1,0 +1,5 @@
+[package]
+
+name = "sketchy"
+version = "0.0.1"
+authors = ["Coda Hale <coda.hale@gmail.com>"]
