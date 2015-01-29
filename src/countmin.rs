@@ -71,7 +71,7 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
     }
 
     /// Merges another Count-Min Sketch into self.
-    pub fn merge(&mut self, v: CountMinSketch<E, C>) {
+    pub fn merge<'a>(&mut self, v: &'a CountMinSketch<E, C>) {
         self.counters = self.counters.iter().zip(v.counters.iter()).map(|(s, o)| {
             s.iter().zip(o.iter()).map(|(&a, &b)| a + b).collect()
         }).collect()
@@ -125,7 +125,7 @@ mod test {
         let mut two = CountMinSketch::new(10, 1000);
         two.add("two hundred");
 
-        one.merge(two);
+        one.merge(&two);
 
         assert_eq!(one.estimate("two hundred"), 1);
     }
