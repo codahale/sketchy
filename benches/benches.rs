@@ -31,3 +31,13 @@ fn bench_estimate(b: &mut Bencher) {
         cms.estimate("this is the end")
     })
 }
+
+#[bench]
+fn merge(b: &mut Bencher) {
+    let mut one = CountMinSketch::<u64, u64>::new(10, 1000);
+    let two = CountMinSketch::<u64, u64>::new(10, 1000);
+
+    b.iter(|| {
+        one.merge(&two)
+    })
+}
