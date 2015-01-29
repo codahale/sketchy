@@ -26,8 +26,8 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
     /// Returns a CountMinSketch which provides frequency estimates where the
     /// error is within a factor of epsilon with the given confidence.
     pub fn with_confidence(epsilon: f64, confidence: f64) -> CountMinSketch<E, C> {
-        let width = (E / epsilon).ceil() as usize;
         let depth = (1.0 / (1.0 - confidence)).ln().ceil() as usize;
+        let width = (E / epsilon).ceil() as usize;
         CountMinSketch::new(depth, width)
     }
 
