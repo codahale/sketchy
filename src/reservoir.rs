@@ -1,3 +1,4 @@
+use std::clone::Clone;
 use std::rand::{Rng, thread_rng};
 
 /// A reservoir sample maintains a sample of K elements, selected uniformly and
@@ -7,7 +8,7 @@ pub struct ReservoirSample<E> {
     elements: Vec<E>,
 }
 
-impl <E: Copy> ReservoirSample<E> {
+impl <E: Copy + Clone> ReservoirSample<E> {
     /// Returns a new `ReservoirSample` of the given size.
     pub fn new(size: usize) -> ReservoirSample<E> {
         ReservoirSample::<E>{
@@ -31,7 +32,7 @@ impl <E: Copy> ReservoirSample<E> {
 
     /// Returns the recorded elements in the sample.
     pub fn elements(self) -> Vec<E> {
-        self.elements.iter().map(|&e| e).collect()
+        self.elements.clone()
     }
 }
 
