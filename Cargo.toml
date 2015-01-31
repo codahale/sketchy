@@ -3,3 +3,5 @@
 name = "sketchy"
 version = "0.0.1"
 authors = ["Coda Hale <coda.hale@gmail.com>"]
+license = "Apache-2.0"
+repository = "https://github.com/codahale/sketchy"
