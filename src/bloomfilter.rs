@@ -57,6 +57,17 @@ impl<E: Hash<SipHasher>> BloomFilter<E> {
         }
         true
     }
+
+    /// Merges the contents of the given `BloomFilter` into `self`. Both
+    /// filters must have the same parameters. Returns true if self changed.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the bloom filters have different parameters.
+    pub fn merge(&mut self, other: BloomFilter<E>) -> bool {
+        assert_eq!(self.k, other.k);
+        self.bits.union(&other.bits)
+    }
 }
 
 fn best_buckets_and_k(max_false_pos_prob: f64) -> (usize, usize) {
@@ -133,5 +144,20 @@ mod test {
         bf.insert(400);
 
         assert_eq!(bf.contains(100), true);
+    }
+
+    #[test]
+    fn merge() {
+        let mut bf1 = BloomFilter::new(100, 0.01);
+        bf1.insert(100);
+
+        let mut bf2 = BloomFilter::new(100, 0.01);
+        bf2.insert(400);
+
+        if !bf1.merge(bf2) {
+            panic!("merge made no changes");
+        }
+
+        assert_eq!(bf1.contains(400), true);
     }
 }
