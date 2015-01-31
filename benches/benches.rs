@@ -15,6 +15,19 @@ fn bloomf_insert(b: &mut Bencher) {
 }
 
 #[bench]
+fn bloomf_merge(b: &mut Bencher) {
+    let mut bf1 = BloomFilter::new(100_000, 0.01);
+    bf1.insert("this is the end");
+
+    let mut bf2 = BloomFilter::new(100_000, 0.01);
+    bf2.insert("this is not the end");
+
+    b.iter(|| {
+        bf1.merge(&bf2)
+    })
+}
+
+#[bench]
 fn cms_add(b: &mut Bencher) {
     let mut cms = CountMinSketch::<_, u64>::with_confidence(0.0001, 0.99);
 

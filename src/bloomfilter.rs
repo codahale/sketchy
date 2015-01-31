@@ -64,7 +64,7 @@ impl<E: Hash<SipHasher>> BloomFilter<E> {
     /// # Panics
     ///
     /// Panics if the bloom filters have different parameters.
-    pub fn merge(&mut self, other: BloomFilter<E>) -> bool {
+    pub fn merge<'a>(&mut self, other: &'a BloomFilter<E>) -> bool {
         assert_eq!(self.k, other.k);
         self.bits.union(&other.bits)
     }
@@ -154,7 +154,7 @@ mod test {
         let mut bf2 = BloomFilter::new(100, 0.01);
         bf2.insert(400);
 
-        if !bf1.merge(bf2) {
+        if !bf1.merge(&bf2) {
             panic!("merge made no changes");
         }
 
