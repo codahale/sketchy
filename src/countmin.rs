@@ -5,7 +5,7 @@ use std::hash::{Hash,SipHasher};
 use std::iter::repeat;
 use std::num::{Float, Int};
 
-use hash::{hashes, index};
+use hash::indexes;
 
 /// A Count-Min Sketch is a probabilistic data structure which provides
 /// estimates of the frequency of elements in a data stream. It is parameterized
@@ -20,7 +20,9 @@ use hash::{hashes, index};
 ///
 /// println!("how many? {}", cms.estimate("one hundred"));
 /// ```
-pub struct CountMinSketch<E, C>{
+pub struct CountMinSketch<E, C> {
+    depth: usize,
+    width: usize,
     counters: Vec<Vec<C>>,
 }
 
@@ -36,6 +38,8 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
     /// Returns a CountMinSketch with the given depth and width.
     pub fn new(depth: usize, width: usize) -> CountMinSketch<E, C> {
         CountMinSketch::<E, C>{
+            depth: depth,
+            width: width,
             counters: repeat({
                 repeat(Int::zero()).take(width).collect()
             }).take(depth).collect(),
@@ -49,22 +53,16 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
 
     /// Registers multiple occurrences of a element.
     pub fn add_n(&mut self, e: E, n: C) {
-        let (h1, h2) = hashes(e);
-
-        for (i, c) in self.counters.iter_mut().enumerate() {
-            let idx = index(h1, h2, i, c.len());
-            c[idx] = c[idx] + n;
+        for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
+            self.counters[i][idx] = self.counters[i][idx] + n;
         }
     }
 
     /// Estimates the frequency of the given element.
     pub fn estimate(&self, e: E) -> C {
-        let (h1, h2) = hashes(e);
-
         let mut max: C = Int::zero();
-        for (i, c) in self.counters.iter().enumerate() {
-            let idx = index(h1, h2, i, c.len());
-            let v = c[idx];
+        for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
+            let v = self.counters[i][idx];
             if v > max {
                 max = v
             }

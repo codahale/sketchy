@@ -3,7 +3,7 @@
 use std::collections::Bitv;
 use std::hash::{Hash,SipHasher};
 
-use hash::{hashes, index};
+use hash::indexes;
 
 /// A Bloom filter is a space-efficient probabilistic data structure that is
 /// used to test whether an element is a member of a set. False positive matches
@@ -28,19 +28,15 @@ impl<E: Hash<SipHasher>> BloomFilter<E> {
 
     /// Adds a value to the set.
     pub fn insert(&mut self, e: E) {
-        let (h1, h2) = hashes(e);
-        for i in (0..self.k) {
-            let idx = index(h1, h2, i, self.bits.len());
-            self.bits.set(idx, true);
+        for i in indexes(e, self.bits.len()).take(self.k) {
+            self.bits.set(i, true);
         }
     }
 
     // Returns `true` if the set probably contains the given element.
     pub fn contains(&mut self, e: E) -> bool {
-        let (h1, h2) = hashes(e);
-        for i in (0..self.k) {
-            let idx = index(h1, h2, i, self.bits.len());
-            if !self.bits.get(idx).unwrap() {
+        for i in indexes(e, self.bits.len()).take(self.k) {
+            if !self.bits.get(i).unwrap() {
                 return false
             }
         }

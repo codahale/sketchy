@@ -1,9 +1,14 @@
 #![allow(unstable)]
 
+use std::iter::Iterator;
 use std::hash::{Hash,Hasher,SipHasher};
 
-#[inline(always)]
-pub fn hashes<E: Hash<SipHasher>>(e: E) -> (u64, u64) {
+/// Returns an iterator of indexes for the given element with a maximum
+/// size. This uses [double
+/// hashing](http://www.eecs.harvard.edu/~kirsch/pubs/bbbf/esa06.pdf), allowing
+/// for multiple indexes to be created from only two full runs through
+/// SipHash2-4.
+pub fn indexes<E: Hash<SipHasher>>(e: E, max: usize) -> Index {
     let mut h = SipHasher::new();
     e.hash(&mut h);
     let hash1 = h.finish();
@@ -12,10 +17,27 @@ pub fn hashes<E: Hash<SipHasher>>(e: E) -> (u64, u64) {
     e.hash(&mut h);
     let hash2 = h.finish();
 
-    (hash1, hash2)
+    Index{
+        h1: hash1,
+        h2: hash2,
+        max: max as u64,
+        i: 0,
+    }
 }
 
-#[inline(always)]
-pub fn index(h1: u64, h2: u64, i: usize, len: usize) -> usize {
-    ((h1 + i as u64 * h2) % len as u64) as usize
+struct Index {
+    h1: u64,
+    h2: u64,
+    max: u64,
+    i: u64,
+}
+
+impl Iterator for Index {
+    type Item = usize;
+
+    #[inline(always)]
+    fn next(&mut self) -> Option<usize> {
+        self.i += 1;
+        Some(((self.h1 + self.i * self.h2) % self.max) as usize)
+    }
 }
