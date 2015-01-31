@@ -43,11 +43,16 @@ mod test {
     fn insert() {
         let mut sample = ReservoirSample::new(10);
 
-        for i in 0..100 {
-            sample.insert(i)
+        for i in 0..100i32 {
+            sample.insert(i);
         }
 
-        assert_eq!(sample.elements(),
-                   vec![50, 1, 45, 31, 67, 68, 58, 37, 90, 93])
+        let elements = sample.elements();
+
+        assert_eq!(elements.len(), 10);
+
+        for &i in elements.iter() {
+            assert!(i >= 0 && i < 100);
+        }
     }
 }
