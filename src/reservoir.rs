@@ -1,5 +1,3 @@
-#![allow(unstable)]
-
 use std::rand::{Rng, thread_rng};
 
 /// A reservoir sample maintains a sample of K elements, selected uniformly and

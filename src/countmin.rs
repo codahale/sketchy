@@ -1,5 +1,3 @@
-#![allow(unstable)]
-
 use std::f64::consts::E;
 use std::hash::{Hash,SipHasher};
 use std::iter::repeat;

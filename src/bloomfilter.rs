@@ -1,5 +1,3 @@
-#![allow(unstable)]
-
 use std::collections::Bitv;
 use std::hash::{Hash,SipHasher};
 

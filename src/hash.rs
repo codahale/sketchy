@@ -1,5 +1,3 @@
-#![allow(unstable)]
-
 use std::iter::Iterator;
 use std::hash::{Hash,Hasher,SipHasher};
 
