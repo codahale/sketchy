@@ -1,9 +1,11 @@
 #![allow(unstable)]
 
 use std::f64::consts::E;
-use std::hash::{Hash,Hasher,SipHasher};
+use std::hash::{Hash,SipHasher};
 use std::iter::repeat;
 use std::num::{Float, Int};
+
+use hash::{hashes, index};
 
 /// A Count-Min Sketch is a probabilistic data structure which provides
 /// estimates of the frequency of elements in a data stream. It is parameterized
@@ -47,7 +49,7 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
 
     /// Registers multiple occurrences of a element.
     pub fn add_n(&mut self, e: E, n: C) {
-        let (h1, h2) = hash(e);
+        let (h1, h2) = hashes(e);
 
         for (i, c) in self.counters.iter_mut().enumerate() {
             let idx = index(h1, h2, i, c.len());
@@ -57,7 +59,7 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
 
     /// Estimates the frequency of the given element.
     pub fn estimate(&self, e: E) -> C {
-        let (h1, h2) = hash(e);
+        let (h1, h2) = hashes(e);
 
         let mut max: C = Int::zero();
         for (i, c) in self.counters.iter().enumerate() {
@@ -76,24 +78,6 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
             s.iter().zip(o.iter()).map(|(&a, &b)| a + b).collect()
         }).collect()
     }
-}
-
-#[inline(always)]
-fn hash<K: Hash<SipHasher>>(k: K) -> (u64, u64) {
-    let mut h = SipHasher::new();
-    k.hash(&mut h);
-    let hash1 = h.finish();
-
-    h = SipHasher::new_with_keys(0, hash1);
-    k.hash(&mut h);
-    let hash2 = h.finish();
-
-    (hash1, hash2)
-}
-
-#[inline(always)]
-fn index(h1: u64, h2: u64, i: usize, len: usize) -> usize {
-    ((h1 + i as u64 * h2) % len as u64) as usize
 }
 
 #[cfg(test)]
