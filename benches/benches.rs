@@ -1,4 +1,5 @@
-#![allow(unstable)]
+#![feature(test)]
+
 extern crate sketchy;
 extern crate test;
 
