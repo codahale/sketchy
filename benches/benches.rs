@@ -6,7 +6,7 @@ use sketchy::CountMinSketch;
 use test::Bencher;
 
 #[bench]
-fn bench_add(b: &mut Bencher) {
+fn cms_add(b: &mut Bencher) {
     let mut cms = CountMinSketch::<_, u64>::with_confidence(0.0001, 0.99);
 
     b.iter(|| {
@@ -15,7 +15,7 @@ fn bench_add(b: &mut Bencher) {
 }
 
 #[bench]
-fn bench_add_n(b: &mut Bencher) {
+fn cms_add_n(b: &mut Bencher) {
     let mut cms = CountMinSketch::<_, u64>::with_confidence(0.0001, 0.99);
 
     b.iter(|| {
@@ -24,7 +24,7 @@ fn bench_add_n(b: &mut Bencher) {
 }
 
 #[bench]
-fn bench_estimate(b: &mut Bencher) {
+fn cms_estimate(b: &mut Bencher) {
     let cms = CountMinSketch::<_, u64>::with_confidence(0.0001, 0.99);
 
     b.iter(|| {
@@ -33,7 +33,7 @@ fn bench_estimate(b: &mut Bencher) {
 }
 
 #[bench]
-fn merge(b: &mut Bencher) {
+fn cms_merge(b: &mut Bencher) {
     let mut one = CountMinSketch::<u64, u64>::new(10, 1000);
     let two = CountMinSketch::<u64, u64>::new(10, 1000);
 
