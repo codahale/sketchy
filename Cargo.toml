@@ -1,6 +1,8 @@
 [package]
 
 name = "sketchy"
+description = "A set of probabilistic sketch data structures."
+readme = "README.md"
 version = "0.0.1"
 authors = ["Coda Hale <coda.hale@gmail.com>"]
 license = "Apache-2.0"
