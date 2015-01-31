@@ -8,15 +8,30 @@ use hash::indexes;
 /// A Bloom filter is a space-efficient probabilistic data structure that is
 /// used to test whether an element is a member of a set. False positive matches
 /// are possible, but false negatives are not.
+///
+/// ```
+/// use sketchy::BloomFilter;
+///
+/// // Create a filter which can handle 100K elements with a 1% maximum
+/// // probability of a false positive.
+/// let mut filter = BloomFilter::new(100_000, 0.01);
+///
+/// filter.insert("one");
+/// filter.insert("two");
+///
+/// if filter.contains("one") {
+///     println!("yay");
+/// }
+/// ```
 pub struct BloomFilter<E> {
     k: usize,
     bits: Bitv,
 }
 
 impl<E: Hash<SipHasher>> BloomFilter<E> {
-    // Creates a new `BloomFilter` instance, tuned for a population of `n`
-    // elements with the given upper bound of the probability of false
-    // positives.
+    /// Creates a new `BloomFilter` instance, tuned for a population of `n`
+    /// elements with the given upper bound of the probability of false
+    /// positives.
     pub fn new(n: usize, max_false_pos_prob: f64) -> BloomFilter<E> {
         let (buckets, k) = best_buckets_and_k(max_false_pos_prob);
         let size = n * buckets + 20;
@@ -33,7 +48,7 @@ impl<E: Hash<SipHasher>> BloomFilter<E> {
         }
     }
 
-    // Returns `true` if the set probably contains the given element.
+    /// Returns `true` if the set probably contains the given element.
     pub fn contains(&mut self, e: E) -> bool {
         for i in indexes(e, self.bits.len()).take(self.k) {
             if !self.bits.get(i).unwrap() {
