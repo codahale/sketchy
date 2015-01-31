@@ -7,7 +7,7 @@ use test::Bencher;
 
 #[bench]
 fn bloomf_insert(b: &mut Bencher) {
-    let mut bf = BloomFilter::new(1000, 0.001);
+    let mut bf = BloomFilter::new(100_000, 0.01);
 
     b.iter(|| {
         bf.insert("this is the end")
