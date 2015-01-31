@@ -35,7 +35,7 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
 
     /// Returns a CountMinSketch with the given depth and width.
     pub fn new(depth: usize, width: usize) -> CountMinSketch<E, C> {
-        CountMinSketch::<E, C>{
+        CountMinSketch::<E, C> {
             depth: depth,
             width: width,
             counters: repeat({

@@ -8,10 +8,10 @@ pub struct ReservoirSample<E> {
     elements: Vec<E>,
 }
 
-impl <E: Copy + Clone> ReservoirSample<E> {
+impl<E: Copy + Clone> ReservoirSample<E> {
     /// Returns a new `ReservoirSample` of the given size.
     pub fn new(size: usize) -> ReservoirSample<E> {
-        ReservoirSample::<E>{
+        ReservoirSample::<E> {
             count: 0,
             elements: Vec::with_capacity(size),
         }
