@@ -2,8 +2,17 @@
 extern crate sketchy;
 extern crate test;
 
-use sketchy::CountMinSketch;
+use sketchy::{BloomFilter, CountMinSketch};
 use test::Bencher;
+
+#[bench]
+fn bloomf_insert(b: &mut Bencher) {
+    let mut bf = BloomFilter::new(1000, 0.001);
+
+    b.iter(|| {
+        bf.insert("this is the end")
+    })
+}
 
 #[bench]
 fn cms_add(b: &mut Bencher) {
