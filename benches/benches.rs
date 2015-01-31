@@ -2,7 +2,7 @@
 extern crate sketchy;
 extern crate test;
 
-use sketchy::{BloomFilter, CountMinSketch};
+use sketchy::{BloomFilter, CountMinSketch, ReservoirSample};
 use test::Bencher;
 
 #[bench]
@@ -61,5 +61,14 @@ fn cms_merge(b: &mut Bencher) {
 
     b.iter(|| {
         one.merge(&two)
+    })
+}
+
+#[bench]
+fn res_insert(b: &mut Bencher) {
+    let mut res = ReservoirSample::new(1000);
+
+    b.iter(|| {
+        res.insert(100u32)
     })
 }
