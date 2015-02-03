@@ -1,5 +1,5 @@
-use std::iter::Iterator;
 use std::hash::{Hash,Hasher,SipHasher};
+use std::iter::Iterator;
 
 /// Returns an iterator of indexes for the given element with a maximum
 /// size. This uses [double
