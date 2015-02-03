@@ -3,6 +3,18 @@ use std::rand::{Rng, thread_rng};
 
 /// A reservoir sample maintains a sample of K elements, selected uniformly and
 /// at random from a stream.
+///
+/// ```
+/// use sketchy::ReservoirSample;
+///
+/// let mut res = ReservoirSample::new(2);
+///
+/// for v in ["one", "two", "three"].iter() {
+///     res.insert(*v);
+/// }
+///
+/// println!("elements: {:?}", res.elements());
+/// ```
 pub struct ReservoirSample<E> {
     count: usize,
     elements: Vec<E>,
