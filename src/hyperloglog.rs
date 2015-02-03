@@ -5,6 +5,18 @@ use std::num::{Float,Int};
 
 /// A HyperLogLog allows for space-efficient estimates of the cardinality of
 /// large multisets.
+///
+/// ```
+/// use sketchy::HyperLogLog;
+///
+/// let mut hll = HyperLogLog::new(0.05); // 5% margin of error
+///
+/// for i in 0..10000 {
+///     hll.insert(i);
+/// }
+///
+/// println!("cardinality: {}", hll.cardinality());
+/// ```
 pub struct HyperLogLog<E> {
     alpha: f64,
     p: usize,
