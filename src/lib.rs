@@ -8,8 +8,10 @@
 mod bloomfilter;
 mod countmin;
 mod hash;
+mod hyperloglog;
 mod reservoir;
 
 pub use bloomfilter::BloomFilter;
 pub use countmin::CountMinSketch;
+pub use hyperloglog::HyperLogLog;
 pub use reservoir::ReservoirSample;

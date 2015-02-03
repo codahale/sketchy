@@ -3,7 +3,7 @@
 extern crate sketchy;
 extern crate test;
 
-use sketchy::{BloomFilter, CountMinSketch, ReservoirSample};
+use sketchy::{BloomFilter, CountMinSketch, HyperLogLog, ReservoirSample};
 use test::Bencher;
 
 #[bench]
@@ -62,6 +62,15 @@ fn cms_merge(b: &mut Bencher) {
 
     b.iter(|| {
         one.merge(&two)
+    })
+}
+
+#[bench]
+fn hll_insert(b: &mut Bencher) {
+    let mut hll = HyperLogLog::new(0.05);
+
+    b.iter(|| {
+        hll.insert(100u32)
     })
 }
 
