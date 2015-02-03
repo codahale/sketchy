@@ -91,6 +91,7 @@ fn alpha(p: usize) -> f64 {
         _ => 0.7213 / (1.0 + 1.079 / (1 << p) as f64),
     }
 }
+
 fn estimate_bias(e: f64, p: usize) -> f64 {
     let biases = BIASES[p - 4];
     let nn = nearest_neighbors(e, ESTIMATES[p - 4]);
@@ -98,16 +99,16 @@ fn estimate_bias(e: f64, p: usize) -> f64 {
 }
 
 fn nearest_neighbors(e: f64, estimates: &[f64]) -> Vec<usize> {
-    let mut distances: Vec<(f64, usize)> = estimates.iter().enumerate().map(|(idx, &val)| ((e - val as f64).powi(2), idx)).collect();
+    let mut distances: Vec<(f64, usize)> = estimates.iter().enumerate()
+        .map(|(idx, &val)| ((e - val as f64).powi(2), idx))
+        .collect();
     distances.sort_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal));
     distances.iter().map(|&(_, idx)| idx).collect()
 }
 
-
 // precision 4 - 18
 static THRESHOLDS: [f64; 15] = [
-    10.0, 20.0, 40.0, 80.0, 220.0, 400.0, 900.0, 1800.0, 3100.0, 6500.0,
-    11500.0, 20000.0, 50000.0, 120000.0, 350000.0,
+    10.0, 20.0, 40.0, 80.0, 220.0, 400.0, 900.0, 1800.0, 3100.0, 6500.0, 11500.0, 20000.0, 50000.0, 120000.0, 350000.0,
     ];
 
 static ESTIMATES: [&'static [f64]; 15] = [
