@@ -32,10 +32,9 @@ impl<E: Hash<SipHasher>> BloomFilter<E> {
     /// positives.
     pub fn new(n: usize, max_false_pos_prob: f64) -> BloomFilter<E> {
         let (buckets, k) = best_buckets_and_k(max_false_pos_prob);
-        let size = n * buckets + 20;
         BloomFilter::<E> {
             k: k,
-            bits: Bitv::from_elem(size, false),
+            bits: Bitv::from_elem(n * buckets + 20, false),
         }
     }
 
