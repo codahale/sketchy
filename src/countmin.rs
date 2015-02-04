@@ -1,7 +1,7 @@
 use std::f64::consts::E;
 use std::hash::{Hash,SipHasher};
 use std::iter::repeat;
-use std::num::{Float, Int};
+use std::num::Float;
 
 use hash::indexes;
 
@@ -12,53 +12,53 @@ use hash::indexes;
 /// ```
 /// use sketchy::CountMinSketch;
 ///
-/// let mut cms = CountMinSketch::<_, u64>::with_confidence(0.001, 0.99);
+/// let mut cms = CountMinSketch::with_confidence(0.001, 0.99);
 /// cms.add("one hundred");
 /// cms.add_n("one hundred", 100);
 ///
 /// println!("how many? {}", cms.estimate("one hundred"));
 /// ```
-pub struct CountMinSketch<E, C> {
+pub struct CountMinSketch<E> {
     depth: usize,
     width: usize,
-    counters: Vec<Vec<C>>,
+    counters: Vec<Vec<u64>>,
 }
 
-impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
+impl<E: Hash<SipHasher>> CountMinSketch<E> {
     /// Returns a CountMinSketch which provides frequency estimates where the
     /// error is within a factor of epsilon with the given confidence.
-    pub fn with_confidence(epsilon: f64, confidence: f64) -> CountMinSketch<E, C> {
+    pub fn with_confidence(epsilon: f64, confidence: f64) -> CountMinSketch<E> {
         let depth = (1.0 / (1.0 - confidence)).ln().ceil() as usize;
         let width = (E / epsilon).ceil() as usize;
         CountMinSketch::new(depth, width)
     }
 
     /// Returns a CountMinSketch with the given depth and width.
-    pub fn new(depth: usize, width: usize) -> CountMinSketch<E, C> {
-        CountMinSketch::<E, C> {
+    pub fn new(depth: usize, width: usize) -> CountMinSketch<E> {
+        CountMinSketch::<E> {
             depth: depth,
             width: width,
             counters: repeat({
-                repeat(Int::zero()).take(width).collect()
+                repeat(0).take(width).collect()
             }).take(depth).collect(),
         }
     }
 
     /// Registers the occurrence of a single element.
     pub fn add(&mut self, e: E) {
-        self.add_n(e, Int::one())
+        self.add_n(e, 1)
     }
 
     /// Registers multiple occurrences of a element.
-    pub fn add_n(&mut self, e: E, n: C) {
+    pub fn add_n(&mut self, e: E, n: u64) {
         for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
             self.counters[i][idx] = self.counters[i][idx] + n;
         }
     }
 
     /// Estimates the frequency of the given element.
-    pub fn estimate(&self, e: E) -> C {
-        let mut max: C = Int::zero();
+    pub fn estimate(&self, e: E) -> u64 {
+        let mut max: u64 = 0;
         for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
             let v = self.counters[i][idx];
             if v > max {
@@ -69,7 +69,7 @@ impl<E: Hash<SipHasher>, C: Copy + Int> CountMinSketch<E, C> {
     }
 
     /// Merges another Count-Min Sketch into self.
-    pub fn merge(&mut self, v: &CountMinSketch<E, C>) {
+    pub fn merge(&mut self, v: &CountMinSketch<E>) {
         self.counters = self.counters.iter().zip(v.counters.iter()).map(|(s, o)| {
             s.iter().zip(o.iter()).map(|(&a, &b)| a + b).collect()
         }).collect()
@@ -82,7 +82,7 @@ mod test {
 
     #[test]
     fn with_confidence() {
-        let cms = CountMinSketch::<u8, u8>::with_confidence(0.0001, 0.99);
+        let cms = CountMinSketch::<u8>::with_confidence(0.0001, 0.99);
 
         assert_eq!(cms.counters.len(), 5);
         assert_eq!(cms.counters[0].len(), 27183);
@@ -99,7 +99,7 @@ mod test {
 
     #[test]
     fn merge() {
-        let mut one = CountMinSketch::<_, u64>::new(10, 1000);
+        let mut one = CountMinSketch::new(10, 1000);
         one.add("one hundred");
 
         let mut two = CountMinSketch::new(10, 1000);
