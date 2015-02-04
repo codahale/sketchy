@@ -68,6 +68,25 @@ impl<E: Hash<SipHasher>> CountMinSketch<E> {
         max
     }
 
+    /// Estimates the frequency of the given element using the
+    /// [Count-Mean-Min algorithm](http://webdocs.cs.ualberta.ca/~fandeng/paper/cmm.pdf),
+    /// which performs better on data sets which aren't highly skewed.
+    pub fn estimate_mean(&self, e: E, n: u64) -> u64 {
+        let mut values = Vec::with_capacity(self.width);
+        for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
+            let v = self.counters[i][idx];
+            let noise = (n - v) / (self.width-1) as u64;
+            values.push(v - noise);
+        }
+
+        values.sort();
+        if values.len() % 2 == 0 {
+            (values[values.len()/2] + values[(values.len()/2)-1]) / 2
+        } else {
+            values[values.len()/2]
+        }
+    }
+
     /// Merges another Count-Min Sketch into self.
     pub fn merge(&mut self, v: &CountMinSketch<E>) {
         self.counters = self.counters.iter().zip(v.counters.iter()).map(|(s, o)| {
@@ -95,6 +114,19 @@ mod test {
         cms.add_n("one hundred", 100);
 
         assert_eq!(cms.estimate("one hundred"), 101);
+    }
+
+    #[test]
+    fn add_and_estimate_mean() {
+        let mut cms = CountMinSketch::new(10, 100);
+        cms.add("one hundred");
+        cms.add("two hundred");
+        cms.add("three hundred");
+        cms.add("four hundred");
+        cms.add("five hundred");
+
+        assert_eq!(cms.estimate("one hundred"), 2);
+        assert_eq!(cms.estimate_mean("one hundred", 5), 1);
     }
 
     #[test]

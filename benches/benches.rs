@@ -56,6 +56,15 @@ fn cms_estimate(b: &mut Bencher) {
 }
 
 #[bench]
+fn cms_estimate_mean(b: &mut Bencher) {
+    let cms = CountMinSketch::with_confidence(0.0001, 0.99);
+
+    b.iter(|| {
+        cms.estimate_mean("this is the end", 100)
+    })
+}
+
+#[bench]
 fn cms_merge(b: &mut Bencher) {
     let mut one = CountMinSketch::<u64>::new(10, 1000);
     let two = CountMinSketch::new(10, 1000);
