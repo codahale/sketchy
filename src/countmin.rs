@@ -13,8 +13,8 @@ use hash::indexes;
 /// use sketchy::CountMinSketch;
 ///
 /// let mut cms = CountMinSketch::with_confidence(0.001, 0.99);
-/// cms.add("one hundred");
-/// cms.add_n("one hundred", 100);
+/// cms.insert("one hundred");
+/// cms.insert_n("one hundred", 100);
 ///
 /// println!("how many? {}", cms.estimate("one hundred"));
 /// ```
@@ -44,13 +44,13 @@ impl<E: Hash<SipHasher>> CountMinSketch<E> {
         }
     }
 
-    /// Registers the occurrence of a single element.
-    pub fn add(&mut self, e: E) {
-        self.add_n(e, 1)
+    /// Adds a value to the sketch.
+    pub fn insert(&mut self, e: E) {
+        self.insert_n(e, 1)
     }
 
-    /// Registers multiple occurrences of a element.
-    pub fn add_n(&mut self, e: E, n: u64) {
+    /// Adds multiple instances of a value to the sketch.
+    pub fn insert_n(&mut self, e: E, n: u64) {
         for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
             self.counters[i][idx] = self.counters[i][idx] + n;
         }
@@ -108,22 +108,22 @@ mod test {
     }
 
     #[test]
-    fn add_and_estimate() {
+    fn insert_and_estimate() {
         let mut cms = CountMinSketch::new(10, 10);
-        cms.add("one hundred");
-        cms.add_n("one hundred", 100);
+        cms.insert("one hundred");
+        cms.insert_n("one hundred", 100);
 
         assert_eq!(cms.estimate("one hundred"), 101);
     }
 
     #[test]
-    fn add_and_estimate_mean() {
+    fn insert_and_estimate_mean() {
         let mut cms = CountMinSketch::new(10, 100);
-        cms.add("one hundred");
-        cms.add("two hundred");
-        cms.add("three hundred");
-        cms.add("four hundred");
-        cms.add("five hundred");
+        cms.insert("one hundred");
+        cms.insert("two hundred");
+        cms.insert("three hundred");
+        cms.insert("four hundred");
+        cms.insert("five hundred");
 
         assert_eq!(cms.estimate("one hundred"), 2);
         assert_eq!(cms.estimate_mean("one hundred", 5), 1);
@@ -132,10 +132,10 @@ mod test {
     #[test]
     fn merge() {
         let mut one = CountMinSketch::new(10, 1000);
-        one.add("one hundred");
+        one.insert("one hundred");
 
         let mut two = CountMinSketch::new(10, 1000);
-        two.add("two hundred");
+        two.insert("two hundred");
 
         one.merge(&two);
 
