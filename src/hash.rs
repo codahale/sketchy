@@ -15,7 +15,7 @@ pub fn indexes<E: Hash<SipHasher>>(e: E, max: usize) -> Index {
     e.hash(&mut h);
     let hash2 = h.finish();
 
-    Index{
+    Index {
         h1: hash1,
         h2: hash2,
         max: max as u64,
