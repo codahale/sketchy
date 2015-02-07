@@ -3,7 +3,6 @@
 #![feature(collections)]
 #![feature(core)]
 #![feature(hash)]
-#![feature(rand)]
 
 mod bloomfilter;
 mod countmin;

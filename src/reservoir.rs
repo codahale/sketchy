@@ -1,5 +1,7 @@
+extern crate rand;
+
 use std::clone::Clone;
-use std::rand::{Rng, thread_rng};
+use self::rand::Rng;
 
 /// A reservoir sample maintains a sample of K elements, selected uniformly and
 /// at random from a stream.
@@ -34,7 +36,7 @@ impl<E: Copy + Clone> ReservoirSample<E> {
         if self.count < self.elements.capacity() {
             self.elements.push(e);
         } else {
-            let idx = thread_rng().gen_range(0, self.count);
+            let idx = rand::thread_rng().gen_range(0, self.count);
             if idx < self.elements.capacity() {
                 self.elements[idx] = e;
             }
