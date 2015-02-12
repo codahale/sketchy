@@ -51,7 +51,7 @@ impl<E: Hash<SipHasher>> CountMinSketch<E> {
 
     /// Adds multiple instances of a value to the sketch.
     pub fn insert_n(&mut self, e: E, n: u64) {
-        for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
+        for (i, idx) in indexes(&e, self.width).take(self.depth).enumerate() {
             self.counters[i][idx] = self.counters[i][idx] + n;
         }
     }
@@ -59,7 +59,7 @@ impl<E: Hash<SipHasher>> CountMinSketch<E> {
     /// Estimates the frequency of the given element.
     pub fn estimate(&self, e: E) -> u64 {
         let mut max: u64 = 0;
-        for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
+        for (i, idx) in indexes(&e, self.width).take(self.depth).enumerate() {
             let v = self.counters[i][idx];
             if v > max {
                 max = v
@@ -72,7 +72,7 @@ impl<E: Hash<SipHasher>> CountMinSketch<E> {
     /// [Count-Mean-Min algorithm](http://webdocs.cs.ualberta.ca/~fandeng/paper/cmm.pdf),
     /// which performs better on data sets which aren't highly skewed.
     pub fn estimate_mean(&self, e: E, n: u64) -> u64 {
-        let mut values: Vec<u64> = indexes(e, self.width).take(self.depth).enumerate().map(|(i, idx)| {
+        let mut values: Vec<u64> = indexes(&e, self.width).take(self.depth).enumerate().map(|(i, idx)| {
             let v = self.counters[i][idx];
             let noise = (n - v) / (self.width-1) as u64;
             v - noise

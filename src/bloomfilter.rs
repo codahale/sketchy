@@ -40,14 +40,14 @@ impl<E: Hash<SipHasher>> BloomFilter<E> {
 
     /// Adds a value to the set.
     pub fn insert(&mut self, e: E) {
-        for i in indexes(e, self.bits.len()).take(self.k) {
+        for i in indexes(&e, self.bits.len()).take(self.k) {
             self.bits.set(i, true);
         }
     }
 
     /// Returns `true` if the set probably contains the given element.
     pub fn contains(&mut self, e: E) -> bool {
-        for i in indexes(e, self.bits.len()).take(self.k) {
+        for i in indexes(&e, self.bits.len()).take(self.k) {
             if !self.bits.get(i).unwrap() {
                 return false
             }
