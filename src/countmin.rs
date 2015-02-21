@@ -1,5 +1,5 @@
 use std::f64::consts::E;
-use std::hash::{Hash,SipHasher};
+use std::hash::Hash;
 use std::iter::repeat;
 use std::num::Float;
 
@@ -24,7 +24,7 @@ pub struct CountMinSketch<E> {
     counters: Vec<Vec<u64>>,
 }
 
-impl<E: Hash<SipHasher>> CountMinSketch<E> {
+impl<E: Hash> CountMinSketch<E> {
     /// Returns a CountMinSketch which provides frequency estimates where the
     /// error is within a factor of epsilon with the given confidence.
     pub fn with_confidence(epsilon: f64, confidence: f64) -> CountMinSketch<E> {

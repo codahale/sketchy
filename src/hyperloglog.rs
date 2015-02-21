@@ -24,7 +24,7 @@ pub struct HyperLogLog<E> {
     m: Vec<u64>,
 }
 
-impl<E: Hash<SipHasher>> HyperLogLog<E> {
+impl<E: Hash> HyperLogLog<E> {
     /// Returns a new `HyperLogLog` with the given margin of error.
     pub fn new(error: f64) -> HyperLogLog<E> {
         let p = (1.04 / error).powi(2).log2().ceil() as usize;

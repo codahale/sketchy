@@ -6,7 +6,7 @@ use std::iter::Iterator;
 /// hashing](http://www.eecs.harvard.edu/~kirsch/pubs/bbbf/esa06.pdf), allowing
 /// for multiple indexes to be created from only two full runs through
 /// SipHash2-4.
-pub fn indexes<'a, E: Hash<SipHasher>>(e: &'a E, max: usize) -> Index {
+pub fn indexes<'a, E: Hash>(e: &'a E, max: usize) -> Index {
     let mut h = SipHasher::new();
     e.hash(&mut h);
     let hash1 = h.finish();

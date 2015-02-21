@@ -1,5 +1,5 @@
 use std::collections::BitVec;
-use std::hash::{Hash,SipHasher};
+use std::hash::Hash;
 
 use hash::indexes;
 
@@ -26,7 +26,7 @@ pub struct BloomFilter<E> {
     bits: BitVec,
 }
 
-impl<E: Hash<SipHasher>> BloomFilter<E> {
+impl<E: Hash> BloomFilter<E> {
     /// Creates a new `BloomFilter` instance, tuned for a population of `n`
     /// elements with the given upper bound of the probability of false
     /// positives.
