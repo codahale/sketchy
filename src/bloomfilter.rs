@@ -1,4 +1,4 @@
-use std::collections::Bitv;
+use std::collections::BitVec;
 use std::hash::{Hash,SipHasher};
 
 use hash::indexes;
@@ -23,7 +23,7 @@ use hash::indexes;
 /// ```
 pub struct BloomFilter<E> {
     k: usize,
-    bits: Bitv,
+    bits: BitVec,
 }
 
 impl<E: Hash<SipHasher>> BloomFilter<E> {
@@ -34,7 +34,7 @@ impl<E: Hash<SipHasher>> BloomFilter<E> {
         let (buckets, k) = best_buckets_and_k(max_false_pos_prob);
         BloomFilter::<E> {
             k: k,
-            bits: Bitv::from_elem(n * buckets + 20, false),
+            bits: BitVec::from_elem(n * buckets + 20, false),
         }
     }
 
