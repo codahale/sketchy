@@ -1,6 +1,7 @@
 use std::cmp::{max, Ordering};
 use std::hash::{Hash,Hasher,SipHasher};
 use std::iter::{repeat,AdditiveIterator};
+use std::marker::PhantomData;
 use std::num::{Float,Int};
 
 /// A HyperLogLog allows for space-efficient estimates of the cardinality of
@@ -22,6 +23,7 @@ pub struct HyperLogLog<E> {
     p: usize,
     msize: u64,
     m: Vec<u64>,
+    marker: PhantomData<E>,
 }
 
 impl<E: Hash> HyperLogLog<E> {
@@ -33,6 +35,7 @@ impl<E: Hash> HyperLogLog<E> {
             p: p,
             msize: 1 << p,
             m: repeat(0).take(1 << p).collect(),
+            marker: PhantomData,
         }
     }
 

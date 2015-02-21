@@ -1,5 +1,6 @@
 use std::collections::BitVec;
 use std::hash::Hash;
+use std::marker::PhantomData;
 
 use hash::indexes;
 
@@ -24,6 +25,7 @@ use hash::indexes;
 pub struct BloomFilter<E> {
     k: usize,
     bits: BitVec,
+    marker: PhantomData<E>,
 }
 
 impl<E: Hash> BloomFilter<E> {
@@ -35,6 +37,7 @@ impl<E: Hash> BloomFilter<E> {
         BloomFilter::<E> {
             k: k,
             bits: BitVec::from_elem(n * buckets + 20, false),
+            marker: PhantomData,
         }
     }
 

@@ -1,6 +1,7 @@
 use std::f64::consts::E;
 use std::hash::Hash;
 use std::iter::repeat;
+use std::marker::PhantomData;
 use std::num::Float;
 
 use hash::indexes;
@@ -22,6 +23,7 @@ pub struct CountMinSketch<E> {
     depth: usize,
     width: usize,
     counters: Vec<Vec<u64>>,
+    marker: PhantomData<E>,
 }
 
 impl<E: Hash> CountMinSketch<E> {
@@ -41,6 +43,7 @@ impl<E: Hash> CountMinSketch<E> {
             counters: repeat({
                 repeat(0).take(width).collect()
             }).take(depth).collect(),
+            marker: PhantomData,
         }
     }
 
