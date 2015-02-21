@@ -9,4 +9,4 @@ license = "Apache-2.0"
 repository = "https://github.com/codahale/sketchy"
 
 [dependencies]
-rand = "0.1.2"
+rand = "*"
