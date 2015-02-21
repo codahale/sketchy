@@ -3,7 +3,7 @@
 extern crate sketchy;
 extern crate test;
 
-use sketchy::{BloomFilter, CountMinSketch, HyperLogLog, ReservoirSample};
+use sketchy::{BloomFilter, CountMinSketch, HyperLogLog, ReservoirSample, TopK};
 use test::Bencher;
 
 #[bench]
@@ -89,5 +89,15 @@ fn res_insert(b: &mut Bencher) {
 
     b.iter(|| {
         res.insert(100u32)
+    })
+}
+
+#[bench]
+fn topk_insert(b: &mut Bencher) {
+    let cms = CountMinSketch::with_confidence(0.001, 0.99);
+    let mut topk = TopK::new(5, 0.05, cms);
+
+    b.iter(|| {
+        topk.insert(100u32)
     })
 }
