@@ -18,9 +18,7 @@ use hash::indexes;
 /// filter.insert("one");
 /// filter.insert("two");
 ///
-/// if filter.contains("one") {
-///     println!("yay");
-/// }
+/// assert!(filter.contains(&"one"));
 /// ```
 pub struct BloomFilter<E> {
     k: usize,
@@ -49,8 +47,8 @@ impl<E: Hash> BloomFilter<E> {
     }
 
     /// Returns `true` if the set probably contains the given element.
-    pub fn contains(&mut self, e: E) -> bool {
-        for i in indexes(&e, self.bits.len()).take(self.k) {
+    pub fn contains(&mut self, e: &E) -> bool {
+        for i in indexes(e, self.bits.len()).take(self.k) {
             if !self.bits.get(i).unwrap() {
                 return false
             }
@@ -143,7 +141,7 @@ mod test {
         bf.insert(100);
         bf.insert(400);
 
-        assert_eq!(bf.contains(100), true);
+        assert_eq!(bf.contains(&100), true);
     }
 
     #[test]
@@ -158,6 +156,6 @@ mod test {
             panic!("merge made no changes");
         }
 
-        assert_eq!(bf1.contains(400), true);
+        assert_eq!(bf1.contains(&400), true);
     }
 }

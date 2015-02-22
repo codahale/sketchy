@@ -17,7 +17,7 @@ use hash::indexes;
 /// cms.insert("one hundred");
 /// cms.insert_n("one hundred", 100);
 ///
-/// println!("how many? {}", cms.estimate("one hundred"));
+/// assert_eq!(cms.estimate(&"one hundred"), 101);
 /// ```
 pub struct CountMinSketch<E> {
     depth: usize,
@@ -60,9 +60,9 @@ impl<E: Hash> CountMinSketch<E> {
     }
 
     /// Estimates the frequency of the given element.
-    pub fn estimate(&self, e: E) -> u64 {
+    pub fn estimate(&self, e: &E) -> u64 {
         let mut max: u64 = 0;
-        for (i, idx) in indexes(&e, self.width).take(self.depth).enumerate() {
+        for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
             let v = self.counters[i][idx];
             if v > max {
                 max = v
@@ -115,7 +115,7 @@ mod test {
         cms.insert("one hundred");
         cms.insert_n("one hundred", 100);
 
-        assert_eq!(cms.estimate("one hundred"), 101);
+        assert_eq!(cms.estimate(&"one hundred"), 101);
     }
 
     #[test]
@@ -127,8 +127,8 @@ mod test {
         cms.insert("four hundred");
         cms.insert("five hundred");
 
-        assert_eq!(cms.estimate("one hundred"), 2);
-        assert_eq!(cms.estimate_mean("one hundred", 5), 1);
+        assert_eq!(cms.estimate(&"one hundred"), 2);
+        assert_eq!(cms.estimate_mean(&"one hundred", 5), 1);
     }
 
     #[test]
@@ -141,6 +141,6 @@ mod test {
 
         one.merge(&two);
 
-        assert_eq!(one.estimate("two hundred"), 1);
+        assert_eq!(one.estimate(&"two hundred"), 1);
     }
 }

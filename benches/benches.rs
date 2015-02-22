@@ -51,7 +51,7 @@ fn cms_estimate(b: &mut Bencher) {
     let cms = CountMinSketch::with_confidence(0.0001, 0.99);
 
     b.iter(|| {
-        cms.estimate("this is the end")
+        cms.estimate(&"this is the end")
     })
 }
 
@@ -60,7 +60,7 @@ fn cms_estimate_mean(b: &mut Bencher) {
     let cms = CountMinSketch::with_confidence(0.0001, 0.99);
 
     b.iter(|| {
-        cms.estimate_mean("this is the end", 100)
+        cms.estimate_mean(&"this is the end", 100)
     })
 }
 
