@@ -1,6 +1,6 @@
 use std::cmp::{max, Ordering};
 use std::hash::{Hash,Hasher,SipHasher};
-use std::iter::{repeat,AdditiveIterator};
+use std::iter::AdditiveIterator;
 use std::marker::PhantomData;
 use std::num::{Float,Int};
 
@@ -34,7 +34,7 @@ impl<E: Hash> HyperLogLog<E> {
             alpha: alpha(p),
             p: p,
             msize: 1 << p,
-            m: repeat(0).take(1 << p).collect(),
+            m: vec![0; 1 << p],
             marker: PhantomData,
         }
     }
