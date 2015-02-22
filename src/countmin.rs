@@ -61,14 +61,12 @@ impl<E: Hash> CountMinSketch<E> {
 
     /// Estimates the frequency of the given element.
     pub fn estimate(&self, e: &E) -> u64 {
-        let mut max: u64 = 0;
-        for (i, idx) in indexes(e, self.width).take(self.depth).enumerate() {
-            let v = self.counters[i][idx];
-            if v > max {
-                max = v
-            }
-        }
-        max
+        indexes(e, self.width)
+            .take(self.depth)
+            .enumerate()
+            .map(|(i, idx)| self.counters[i][idx])
+            .max()
+            .unwrap()
     }
 
     /// Estimates the frequency of the given element using the
