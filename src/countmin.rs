@@ -113,11 +113,12 @@ mod test {
 
     #[test]
     fn insert_and_estimate() {
-        let mut cms = CountMinSketch::new(10, 10);
-        cms.insert("one hundred");
-        cms.insert_n("one hundred", 100);
+        let mut cms = CountMinSketch::new(100, 100);
+        for i in 0..100 {
+            cms.insert(i)
+        }
 
-        assert_eq!(cms.estimate(&"one hundred"), 101);
+        assert_eq!(cms.estimate(&20), 1);
     }
 
     #[test]
