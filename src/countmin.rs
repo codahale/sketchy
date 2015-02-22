@@ -65,7 +65,7 @@ impl<E: Hash> CountMinSketch<E> {
             .take(self.depth)
             .enumerate()
             .map(|(i, idx)| self.counters[i][idx])
-            .max()
+            .min()
             .unwrap()
     }
 
@@ -129,7 +129,7 @@ mod test {
         cms.insert("four hundred");
         cms.insert("five hundred");
 
-        assert_eq!(cms.estimate(&"one hundred"), 2);
+        assert_eq!(cms.estimate(&"one hundred"), 1);
         assert_eq!(cms.estimate_mean(&"one hundred", 5), 1);
     }
 
