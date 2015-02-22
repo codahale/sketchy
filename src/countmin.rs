@@ -1,6 +1,5 @@
 use std::f64::consts::E;
 use std::hash::Hash;
-use std::iter::repeat;
 use std::marker::PhantomData;
 use std::num::Float;
 
@@ -40,9 +39,7 @@ impl<E: Hash> CountMinSketch<E> {
         CountMinSketch::<E> {
             depth: depth,
             width: width,
-            counters: repeat({
-                repeat(0).take(width).collect()
-            }).take(depth).collect(),
+            counters: vec![vec![0; width]; depth],
             marker: PhantomData,
         }
     }
