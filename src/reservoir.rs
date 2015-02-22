@@ -1,7 +1,5 @@
-extern crate rand;
-
 use std::clone::Clone;
-use self::rand::Rng;
+use rand::{thread_rng, Rng};
 
 /// A reservoir sample maintains a sample of K elements, selected uniformly and
 /// at random from a stream. This implementation uses [Vitter's Algorithm
@@ -37,7 +35,7 @@ impl<E: Clone> ReservoirSample<E> {
         if self.count < self.elements.capacity() {
             self.elements.push(e);
         } else {
-            let idx = rand::thread_rng().gen_range(0, self.count);
+            let idx = thread_rng().gen_range(0, self.count);
             if idx < self.elements.capacity() {
                 self.elements[idx] = e;
             }

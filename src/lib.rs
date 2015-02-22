@@ -4,6 +4,8 @@
 #![feature(core)]
 #![feature(hash)]
 
+extern crate rand;
+
 mod bloomfilter;
 mod countmin;
 mod hash;
