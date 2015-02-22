@@ -4,18 +4,19 @@ use std::clone::Clone;
 use self::rand::Rng;
 
 /// A reservoir sample maintains a sample of K elements, selected uniformly and
-/// at random from a stream.
+/// at random from a stream. This implementation uses [Vitter's Algorithm
+/// R](http://www.cs.umd.edu/~samir/498/vitter.pdf) with thread-local PRNGs.
 ///
 /// ```
 /// use sketchy::ReservoirSample;
 ///
 /// let mut res = ReservoirSample::new(2);
 ///
-/// for v in ["one", "two", "three"].iter() {
-///     res.insert(*v);
+/// for v in vec!["one", "two", "three"] {
+///     res.insert(v);
 /// }
 ///
-/// println!("elements: {:?}", res.elements());
+/// assert_eq!(res.elements().len(), 2);
 /// ```
 pub struct ReservoirSample<E> {
     count: usize,

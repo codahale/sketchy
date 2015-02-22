@@ -26,7 +26,7 @@ pub struct CountMinSketch<E> {
 }
 
 impl<E: Hash> CountMinSketch<E> {
-    /// Returns a CountMinSketch which provides frequency estimates where the
+    /// Returns a `CountMinSketch` which provides frequency estimates where the
     /// error is within a factor of epsilon with the given confidence.
     pub fn with_confidence(epsilon: f64, confidence: f64) -> CountMinSketch<E> {
         let depth = (1.0 / (1.0 - confidence)).ln().ceil() as usize;
@@ -34,7 +34,7 @@ impl<E: Hash> CountMinSketch<E> {
         CountMinSketch::new(depth, width)
     }
 
-    /// Returns a CountMinSketch with the given depth and width.
+    /// Returns a `CountMinSketch` with the given depth and width.
     pub fn new(depth: usize, width: usize) -> CountMinSketch<E> {
         CountMinSketch::<E> {
             depth: depth,
@@ -88,7 +88,7 @@ impl<E: Hash> CountMinSketch<E> {
         }
     }
 
-    /// Merges another Count-Min Sketch into self.
+    /// Merges another `CountMinSketch` into `self`.
     pub fn merge(&mut self, v: &CountMinSketch<E>) {
         self.counters = self.counters.iter().zip(v.counters.iter()).map(|(s, o)| {
             s.iter().zip(o.iter()).map(|(&a, &b)| a + b).collect()
