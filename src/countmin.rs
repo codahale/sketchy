@@ -73,11 +73,15 @@ impl<E: Hash> CountMinSketch<E> {
     /// [Count-Mean-Min algorithm](http://webdocs.cs.ualberta.ca/~fandeng/paper/cmm.pdf),
     /// which performs better on data sets which aren't highly skewed.
     pub fn estimate_mean(&self, e: E, n: u64) -> u64 {
-        let mut values: Vec<u64> = indexes(&e, self.width).take(self.depth).enumerate().map(|(i, idx)| {
-            let v = self.counters[i][idx];
-            let noise = (n - v) / (self.width-1) as u64;
-            v - noise
-        }).collect();
+        let mut values: Vec<u64> = indexes(&e, self.width)
+            .take(self.depth)
+            .enumerate()
+            .map(|(i, idx)| {
+                let v = self.counters[i][idx];
+                let noise = (n - v) / (self.width-1) as u64;
+                v - noise
+            })
+            .collect();
 
         values.sort();
         if values.len() % 2 == 0 {
