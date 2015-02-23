@@ -100,6 +100,11 @@ impl<E: Hash> CountMinSketch<E> {
 mod test {
     use super::*;
 
+    use std::collections::HashMap;
+
+    use rand::thread_rng;
+    use rand::distributions::{IndependentSample, Exp};
+
     #[test]
     fn with_confidence() {
         let cms = CountMinSketch::<u8>::with_confidence(0.0001, 0.99);
@@ -142,5 +147,26 @@ mod test {
         one.merge(&two);
 
         assert_eq!(one.estimate(&"two hundred"), 1);
+    }
+
+    #[test]
+    fn accuracy() {
+        let exp = Exp::new(2.0);
+        let values: Vec<u32> = (0..1_000_000).map(|_| {
+            (exp.ind_sample(&mut thread_rng()) * 1000.0) as u32
+        }).collect();
+
+        let mut actual: HashMap<u32, u64> = HashMap::new();
+        let mut cms = CountMinSketch::with_confidence(0.0001, 0.99);
+
+        for v in values.iter() {
+            let n = actual.get(v).map_or(1, |x| x + 1);
+            actual.insert(*v, n);
+            cms.insert(*v);
+        }
+
+        for (v, &freq) in actual.iter() {
+            assert_eq!(cms.estimate(v), freq);
+        }
     }
 }
