@@ -39,3 +39,15 @@ impl Iterator for Index {
         Some(((self.h1 + self.i * self.h2) % self.max) as usize)
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn double_hashing() {
+        let v: Vec<usize> = indexes(&"whee", 100).take(10).collect();
+
+        assert_eq!(v, vec![17, 92, 83, 58, 33, 8, 99, 74, 49, 40]);
+    }
+}
