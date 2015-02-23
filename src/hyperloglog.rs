@@ -16,7 +16,8 @@ use std::num::{Float,Int};
 ///     hll.insert(i);
 /// }
 ///
-/// println!("cardinality: {}", hll.cardinality());
+/// assert!(hll.cardinality() < 10500.0);
+/// assert!(hll.cardinality() >  9500.0);
 /// ```
 pub struct HyperLogLog<E> {
     alpha: f64,
