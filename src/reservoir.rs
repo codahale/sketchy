@@ -1,4 +1,3 @@
-use std::clone::Clone;
 use rand::{thread_rng, Rng};
 
 /// A reservoir sample maintains a sample of K elements, selected uniformly and
