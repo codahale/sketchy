@@ -2,9 +2,7 @@
 //! measuring large or unbounded streams of data by trading some accuracy for a
 //! whole lot of efficiency.
 
-#![feature(collections)]
-#![feature(core)]
-#![feature(hash)]
+#![feature(collections, core, hash)]
 
 extern crate rand;
 
