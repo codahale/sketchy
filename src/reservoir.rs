@@ -57,7 +57,7 @@ mod test {
     fn insert() {
         let mut sample = ReservoirSample::new(10);
 
-        for i in 0..100i32 {
+        for i in 0..100 {
             sample.insert(i);
         }
 
