@@ -42,12 +42,17 @@ impl<E: Hash> HyperLogLog<E> {
 
     /// Inserts an element of the multiset.
     pub fn insert(&mut self, e: E) {
-        // h: D -> {0,1} ** 64
-        // x = h(v)
         let mut h = SipHasher::new();
         e.hash(&mut h);
-        let x = h.finish();
+        self.insert_hashed(h.finish());
+    }
 
+    /// Inserts the hash of an element of the multiset.
+    ///
+    /// Use this only when you have firm opinions about hash algorithms (i.e.,
+    /// SipHash2-4 is too slow for you) or you're working with data which is
+    /// already hashed. Otherwise, use `insert`.
+    pub fn insert_hashed(&mut self, x: u64) {
         // j = <x_0x_1..x_{p-1}>
         let j = x & (self.msize - 1);
 
