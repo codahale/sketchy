@@ -6,7 +6,3 @@ script:
 
 after_success:
   - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash deploy.sh
-
-env:
-  global:
-  - secure: iuhZy8uEvqGaLcFGQK7XlyV6ACxvIsoGygqrMVdlldmVsLXr2FGDaNSOB6tNkodnpLWSpk01LgyjepKcr3Xvk8Z01m0mx6kyq8iNJ+xHR2vz20Knq0hd4iDWR6MJmgGQ/zkug4vp7hRpNt+x5H8uB0KTfSM+NKcuWrVANfSI3g0=
