@@ -36,7 +36,7 @@ impl Iterator for Index {
     #[inline(always)]
     fn next(&mut self) -> Option<usize> {
         self.i += 1;
-        Some(((self.h1 + self.i * self.h2) % self.max) as usize)
+        Some((self.h1.wrapping_add(self.i.wrapping_mul(self.h2)) % self.max) as usize)
     }
 }
 
