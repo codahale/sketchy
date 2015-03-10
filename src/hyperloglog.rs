@@ -4,8 +4,7 @@ use std::iter::AdditiveIterator;
 use std::marker::PhantomData;
 use std::num::{Float,Int};
 
-/// A HyperLogLog allows for space-efficient estimates of the cardinality of
-/// large multisets.
+/// A HyperLogLog allows for space-efficient estimates of the cardinality of large multisets.
 ///
 /// ```
 /// use sketchy::HyperLogLog;
@@ -49,9 +48,8 @@ impl<E: Hash> HyperLogLog<E> {
 
     /// Inserts the hash of an element of the multiset.
     ///
-    /// Use this only when you have firm opinions about hash algorithms (i.e.,
-    /// SipHash2-4 is too slow for you) or you're working with data which is
-    /// already hashed. Otherwise, use `insert`.
+    /// Use this only when you have firm opinions about hash algorithms (i.e., SipHash2-4 is too
+    /// slow for you) or you're working with data which is already hashed. Otherwise, use `insert`.
     pub fn insert_hashed(&mut self, x: u64) {
         // j = <x_0x_1..x_{p-1}>
         let j = x & (self.msize - 1);
@@ -64,8 +62,7 @@ impl<E: Hash> HyperLogLog<E> {
         self.m[idx] = max(self.m[idx], rho(w, 64 - self.p as isize));
     }
 
-    /// Returns an estimate of the cardinality of the multiset that was
-    /// inserted.
+    /// Returns an estimate of the cardinality of the multiset that was inserted.
     pub fn cardinality(&self) -> f64 {
         let v = self.m.iter().filter(|&&a| a == 0).count();
         if v > 0 {

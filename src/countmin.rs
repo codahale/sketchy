@@ -5,9 +5,8 @@ use std::num::Float;
 
 use hash::indexes;
 
-/// A Count-Min Sketch is a probabilistic data structure which provides
-/// estimates of the frequency of elements in a data stream. It is parameterized
-/// with the type of elements.
+/// A Count-Min Sketch is a probabilistic data structure which provides estimates of the frequency
+/// of elements in a data stream. It is parameterized with the type of elements.
 ///
 /// ```
 /// use sketchy::CountMinSketch;
@@ -26,8 +25,8 @@ pub struct CountMinSketch<E> {
 }
 
 impl<E: Hash> CountMinSketch<E> {
-    /// Returns a `CountMinSketch` which provides frequency estimates where the
-    /// error is within a factor of epsilon with the given confidence.
+    /// Returns a `CountMinSketch` which provides frequency estimates where the error is within a
+    /// factor of epsilon with the given confidence.
     pub fn with_confidence(epsilon: f64, confidence: f64) -> CountMinSketch<E> {
         let depth = (1.0 / (1.0 - confidence)).ln().ceil() as usize;
         let width = (E / epsilon).ceil() as usize;
@@ -66,9 +65,9 @@ impl<E: Hash> CountMinSketch<E> {
             .unwrap()
     }
 
-    /// Estimates the frequency of the given element using the
-    /// [Count-Mean-Min algorithm](http://webdocs.cs.ualberta.ca/~fandeng/paper/cmm.pdf),
-    /// which performs better on data sets which aren't highly skewed.
+    /// Estimates the frequency of the given element using the [Count-Mean-Min
+    /// algorithm](http://webdocs.cs.ualberta.ca/~fandeng/paper/cmm.pdf), which performs better on
+    /// data sets which aren't highly skewed.
     pub fn estimate_mean(&self, e: E, n: u64) -> u64 {
         let mut values: Vec<u64> = indexes(&e, self.width)
             .take(self.depth)

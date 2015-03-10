@@ -2,8 +2,8 @@ use std::collections::HashSet;
 use std::hash::Hash;
 use countmin::CountMinSketch;
 
-/// A Top-K heap is a probabilistic data structure which uses a Count-Min Sketch
-/// to calculate the top K elements in a data stream with the highest frequency.
+/// A Top-K heap is a probabilistic data structure which uses a Count-Min Sketch to calculate the
+/// top K elements in a data stream with the highest frequency.
 ///
 /// ```
 /// use sketchy::{CountMinSketch, TopK};
@@ -27,8 +27,8 @@ pub struct TopK<E> {
 }
 
 impl<E: Eq + Hash + Copy> TopK<E> {
-    /// Returns a TopK which will track `k` elements with at least `min`
-    /// frequency (`(0,1)`) using the given CountMinSketch.
+    /// Returns a TopK which will track `k` elements with at least `min` frequency (`(0,1)`) using
+    /// the given CountMinSketch.
     pub fn new(k: usize, min: f64, cms: CountMinSketch<E>) -> TopK<E> {
         TopK::<E> {
             k: k,
@@ -59,9 +59,8 @@ impl<E: Eq + Hash + Copy> TopK<E> {
         v.into_iter().take(self.k).collect()
     }
 
-    /// Shrinks the heap as much as possible while still retaining the top K
-    /// elements. Should be called periodically to filter out false positives as
-    /// the data stream changes.
+    /// Shrinks the heap as much as possible while still retaining the top K elements. Should be
+    /// called periodically to filter out false positives as the data stream changes.
     pub fn shrink_to_fit(&mut self) {
         if self.elements.len() > self.k {
             self.elements = self.elements().into_iter().collect();

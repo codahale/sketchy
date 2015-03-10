@@ -4,9 +4,8 @@ use std::marker::PhantomData;
 
 use hash::indexes;
 
-/// A Bloom filter is a space-efficient probabilistic data structure that is
-/// used to test whether an element is a member of a set. False positive matches
-/// are possible, but false negatives are not.
+/// A Bloom filter is a space-efficient probabilistic data structure that is used to test whether an
+/// element is a member of a set. False positive matches are possible, but false negatives are not.
 ///
 /// ```
 /// use sketchy::BloomFilter;
@@ -27,9 +26,8 @@ pub struct BloomFilter<E> {
 }
 
 impl<E: Hash> BloomFilter<E> {
-    /// Creates a new `BloomFilter` instance, tuned for a population of `n`
-    /// elements with the given upper bound of the probability of false
-    /// positives.
+    /// Creates a new `BloomFilter` instance, tuned for a population of `n` elements with the given
+    /// upper bound of the probability of false positives.
     pub fn new(n: usize, max_false_pos_prob: f64) -> BloomFilter<E> {
         let (buckets, k) = best_buckets_and_k(max_false_pos_prob);
         BloomFilter::<E> {
@@ -56,8 +54,8 @@ impl<E: Hash> BloomFilter<E> {
         true
     }
 
-    /// Merges the contents of the given `BloomFilter` into `self`. Both
-    /// filters must have the same parameters. Returns true if self changed.
+    /// Merges the contents of the given `BloomFilter` into `self`. Both filters must have the same
+    /// parameters. Returns true if self changed.
     ///
     /// # Panics
     ///
@@ -86,8 +84,8 @@ fn best_buckets_and_k(max_false_pos_prob: f64) -> (usize, usize) {
         k = OPT_K[buckets];
     }
 
-    // Now that the number of buckets is sufficient, see if we can relax K
-    // without losing too much precision.
+    // Now that the number of buckets is sufficient, see if we can relax K without losing too much
+    // precision.
     while PROBS[buckets][k-1] <= max_false_pos_prob {
         k -= 1;
     }

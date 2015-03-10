@@ -1,7 +1,7 @@
 use rand::{thread_rng, Rng};
 
-/// A reservoir sample maintains a sample of K elements, selected uniformly and
-/// at random from a stream. This implementation uses [Vitter's Algorithm
+/// A reservoir sample maintains a sample of K elements, selected uniformly and at random from a
+/// stream. This implementation uses [Vitter's Algorithm
 /// R](http://www.cs.umd.edu/~samir/498/vitter.pdf) with thread-local PRNGs.
 ///
 /// ```
