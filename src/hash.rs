@@ -21,7 +21,7 @@ pub fn indexes<E: Hash>(e: &E, max: usize) -> Index {
     }
 }
 
-struct Index {
+pub struct Index {
     h1: u64,
     h2: u64,
     max: u64,
