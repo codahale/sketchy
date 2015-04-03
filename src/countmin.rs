@@ -1,7 +1,6 @@
 use std::f64::consts::E;
 use std::hash::Hash;
 use std::marker::PhantomData;
-use std::num::Float;
 
 use hash::indexes;
 
