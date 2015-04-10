@@ -1,6 +1,5 @@
 use std::cmp::{max, Ordering};
 use std::hash::{Hash,Hasher,SipHasher};
-use std::iter::AdditiveIterator;
 use std::marker::PhantomData;
 use std::num::{Float,Int};
 
@@ -79,7 +78,7 @@ impl<E: Hash> HyperLogLog<E> {
 
     fn ep(&self) -> f64 {
         let e = self.alpha * self.msize.pow(2) as f64 /
-            self.m.iter().map(|&x| (2.0).powf(-(x as f64))).sum();
+            self.m.iter().map(|&x| (2.0).powf(-(x as f64))).sum::<f64>();
         if e < (5 * self.msize) as f64 {
             estimate_bias(e, self.p)
         } else {
@@ -113,7 +112,7 @@ fn alpha(p: usize) -> f64 {
 fn estimate_bias(e: f64, p: usize) -> f64 {
     let biases = BIASES[p - 4];
     let nn = nearest_neighbors(e, ESTIMATES[p - 4]);
-    nn.iter().map(|&i| biases[i]).sum() / nn.len() as f64
+    nn.iter().map(|&i| biases[i]).sum::<f64>() / nn.len() as f64
 }
 
 fn nearest_neighbors(e: f64, estimates: &[f64]) -> Vec<usize> {
