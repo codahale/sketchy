@@ -1,7 +1,8 @@
 use std::cmp::{max, Ordering};
 use std::hash::{Hash,Hasher,SipHasher};
 use std::marker::PhantomData;
-use std::num::{Float,Int};
+
+use num::Float;
 
 /// A HyperLogLog allows for space-efficient estimates of the cardinality of large multisets.
 ///

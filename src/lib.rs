@@ -3,6 +3,7 @@
 
 #![feature(collections, core)]
 
+extern crate num;
 extern crate rand;
 
 mod bloomfilter;
