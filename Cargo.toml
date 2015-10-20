@@ -11,3 +11,4 @@ repository = "https://github.com/codahale/sketchy"
 [dependencies]
 rand = "*"
 num = "*"
+bit-vec = "*"

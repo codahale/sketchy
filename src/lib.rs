@@ -5,6 +5,7 @@
 
 extern crate num;
 extern crate rand;
+extern crate bit_vec;
 
 mod bloomfilter;
 mod countmin;

@@ -1,6 +1,6 @@
-use std::collections::BitVec;
 use std::hash::Hash;
 use std::marker::PhantomData;
+use bit_vec::BitVec;
 
 use hash::indexes;
 
