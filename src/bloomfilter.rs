@@ -64,6 +64,11 @@ impl<E: Hash> BloomFilter<E> {
         assert_eq!(self.k, other.k);
         self.bits.union(&other.bits)
     }
+
+    /// Clears the bit vector, removing all elements from the set
+    pub fn clear(&mut self) {
+        self.bits.clear();
+    }
 }
 
 fn best_buckets_and_k(max_false_pos_prob: f64) -> (usize, usize) {
@@ -155,5 +160,14 @@ mod test {
         }
 
         assert_eq!(bf1.contains(&400), true);
+    }
+
+    #[test]
+    fn clear() {
+        let mut bf = BloomFilter::new(100, 0.01);
+        bf.insert(100);
+        assert_eq!(bf.contains(&100), true);
+        bf.clear();
+        assert_eq!(bf.contains(&100), false);
     }
 }
