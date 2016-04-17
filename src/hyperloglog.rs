@@ -79,7 +79,8 @@ impl<E: Hash> HyperLogLog<E> {
 
     fn ep(&self) -> f64 {
         let e = self.alpha * self.msize.pow(2) as f64 /
-            self.m.iter().map(|&x| (2.0).powf(-(x as f64))).sum::<f64>();
+            self.m.iter().map(|&x| (2.0).powf(-(x as f64)))
+                         .fold(0.0, |sum, x| sum + x);
         if e < (5 * self.msize) as f64 {
             estimate_bias(e, self.p)
         } else {
@@ -113,7 +114,7 @@ fn alpha(p: usize) -> f64 {
 fn estimate_bias(e: f64, p: usize) -> f64 {
     let biases = BIASES[p - 4];
     let nn = nearest_neighbors(e, ESTIMATES[p - 4]);
-    nn.iter().map(|&i| biases[i]).sum::<f64>() / nn.len() as f64
+    nn.iter().map(|&i| biases[i]).fold(0.0, |sum, x| sum + x) / nn.len() as f64
 }
 
 fn nearest_neighbors(e: f64, estimates: &[f64]) -> Vec<usize> {
@@ -205,7 +206,7 @@ mod test {
         let actual = 100000.0;
         let p = 0.05;
         let mut hll = HyperLogLog::new(p);
-        for i in (0..actual as usize) {
+        for i in 0..actual as usize {
             hll.insert(i);
         }
 
