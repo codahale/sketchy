@@ -69,28 +69,30 @@ impl<E: Hash> CountMinSketch<E> {
     /// data sets which aren't highly skewed.
     pub fn estimate_mean(&self, e: E, n: u64) -> u64 {
         let mut values: Vec<u64> = indexes(&e, self.width)
-            .take(self.depth)
-            .enumerate()
-            .map(|(i, idx)| {
-                let v = self.counters[i][idx];
-                let noise = (n - v) / (self.width-1) as u64;
-                v - noise
-            })
-            .collect();
+                                       .take(self.depth)
+                                       .enumerate()
+                                       .map(|(i, idx)| {
+                                           let v = self.counters[i][idx];
+                                           let noise = (n - v) / (self.width - 1) as u64;
+                                           v - noise
+                                       })
+                                       .collect();
 
         values.sort();
         if values.len() % 2 == 0 {
-            (values[values.len()/2] + values[(values.len()/2)-1]) / 2
+            (values[values.len() / 2] + values[(values.len() / 2) - 1]) / 2
         } else {
-            values[values.len()/2]
+            values[values.len() / 2]
         }
     }
 
     /// Merges another `CountMinSketch` into `self`.
     pub fn merge(&mut self, v: &CountMinSketch<E>) {
-        self.counters = self.counters.iter().zip(v.counters.iter()).map(|(s, o)| {
-            s.iter().zip(o.iter()).map(|(&a, &b)| a + b).collect()
-        }).collect()
+        self.counters = self.counters
+                            .iter()
+                            .zip(v.counters.iter())
+                            .map(|(s, o)| s.iter().zip(o.iter()).map(|(&a, &b)| a + b).collect())
+                            .collect()
     }
 }
 
@@ -150,9 +152,9 @@ mod test {
     #[test]
     fn accuracy() {
         let exp = Exp::new(2.0);
-        let values: Vec<u32> = (0..1_000_000).map(|_| {
-            (exp.ind_sample(&mut thread_rng()) * 1000.0) as u32
-        }).collect();
+        let values: Vec<u32> = (0..1_000_000)
+                                   .map(|_| (exp.ind_sample(&mut thread_rng()) * 1000.0) as u32)
+                                   .collect();
 
         let mut actual: HashMap<u32, u64> = HashMap::new();
         let mut cms = CountMinSketch::with_confidence(0.0001, 0.99);

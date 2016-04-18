@@ -51,10 +51,11 @@ impl<E: Eq + Hash + Copy> TopK<E> {
 
     /// Returns a vector of the top K elements, in reverse order of frequency.
     pub fn elements(&mut self) -> Vec<E> {
-        let mut v: Vec<E> = self.elements.iter()
-            .filter(|e| self.is_top(e))
-            .map(|&e| e)
-            .collect();
+        let mut v: Vec<E> = self.elements
+                                .iter()
+                                .filter(|e| self.is_top(e))
+                                .map(|&e| e)
+                                .collect();
         v.sort_by(|a, b| self.cms.estimate(b).cmp(&self.cms.estimate(a)));
         v.into_iter().take(self.k).collect()
     }
