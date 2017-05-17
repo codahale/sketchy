@@ -2,7 +2,7 @@ use std::hash::{Hash,Hasher,SipHasher};
 use std::iter::Iterator;
 
 /// Returns an iterator of indexes for the given element with a maximum size. This uses [double
-/// hashing](http://www.eecs.harvard.edu/~kirsch/pubs/bbbf/esa06.pdf), allowing for multiple indexes
+/// hashing](https://www.eecs.harvard.edu/~michaelm/postscripts/tr-02-05.pdf), allowing for multiple indexes
 /// to be created from only two full runs through SipHash2-4.
 pub fn indexes<E: Hash>(e: &E, max: usize) -> Index {
     let mut h = SipHasher::new();
