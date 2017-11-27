@@ -1,15 +1,17 @@
-use std::hash::{Hash, Hasher, SipHasher};
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 use std::iter::Iterator;
 
 /// Returns an iterator of indexes for the given element with a maximum size. This uses [double
 /// hashing](https://www.eecs.harvard.edu/~michaelm/postscripts/tr-02-05.pdf), allowing for multiple indexes
 /// to be created from only two full runs through SipHash2-4.
 pub fn indexes<E: Hash>(e: &E, max: usize) -> Index {
-    let mut h = SipHasher::new();
+    let mut h = DefaultHasher::new();
     e.hash(&mut h);
     let hash1 = h.finish();
 
-    h = SipHasher::new_with_keys(0, hash1);
+    h = DefaultHasher::new();
+    h.write_u64(hash1);
     e.hash(&mut h);
     let hash2 = h.finish();
 
@@ -46,6 +48,6 @@ mod test {
     fn double_hashing() {
         let v: Vec<usize> = indexes(&"whee", 100).take(10).collect();
 
-        assert_eq!(v, vec![17, 92, 83, 58, 33, 8, 99, 74, 49, 40]);
+        assert_eq!(v, vec![3, 67, 15, 79, 43, 7, 71, 19, 83, 47]);
     }
 }

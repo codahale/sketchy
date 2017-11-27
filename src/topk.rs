@@ -31,10 +31,10 @@ impl<E: Eq + Hash + Copy> TopK<E> {
     /// the given CountMinSketch.
     pub fn new(k: usize, min: f64, cms: CountMinSketch<E>) -> TopK<E> {
         TopK::<E> {
-            k: k,
-            min: min,
+            k,
+            min,
             n: 0,
-            cms: cms,
+            cms,
             elements: HashSet::with_capacity(k),
         }
     }
@@ -52,10 +52,10 @@ impl<E: Eq + Hash + Copy> TopK<E> {
     /// Returns a vector of the top K elements, in reverse order of frequency.
     pub fn elements(&mut self) -> Vec<E> {
         let mut v: Vec<E> = self.elements
-                                .iter()
-                                .filter(|e| self.is_top(e))
-                                .map(|&e| e)
-                                .collect();
+            .iter()
+            .filter(|e| self.is_top(e))
+            .cloned()
+            .collect();
         v.sort_by(|a, b| self.cms.estimate(b).cmp(&self.cms.estimate(a)));
         v.into_iter().take(self.k).collect()
     }

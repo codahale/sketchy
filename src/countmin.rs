@@ -35,8 +35,8 @@ impl<E: Hash> CountMinSketch<E> {
     /// Returns a `CountMinSketch` with the given depth and width.
     pub fn new(depth: usize, width: usize) -> CountMinSketch<E> {
         CountMinSketch::<E> {
-            depth: depth,
-            width: width,
+            depth,
+            width,
             counters: vec![vec![0; width]; depth],
             marker: PhantomData,
         }
@@ -50,7 +50,7 @@ impl<E: Hash> CountMinSketch<E> {
     /// Adds multiple instances of a value to the sketch.
     pub fn insert_n(&mut self, e: E, n: u64) {
         for (i, idx) in indexes(&e, self.width).take(self.depth).enumerate() {
-            self.counters[i][idx] = self.counters[i][idx] + n;
+            self.counters[i][idx] += n;
         }
     }
 
@@ -69,14 +69,14 @@ impl<E: Hash> CountMinSketch<E> {
     /// data sets which aren't highly skewed.
     pub fn estimate_mean(&self, e: E, n: u64) -> u64 {
         let mut values: Vec<u64> = indexes(&e, self.width)
-                                       .take(self.depth)
-                                       .enumerate()
-                                       .map(|(i, idx)| {
-                                           let v = self.counters[i][idx];
-                                           let noise = (n - v) / (self.width - 1) as u64;
-                                           v - noise
-                                       })
-                                       .collect();
+            .take(self.depth)
+            .enumerate()
+            .map(|(i, idx)| {
+                let v = self.counters[i][idx];
+                let noise = (n - v) / (self.width - 1) as u64;
+                v - noise
+            })
+            .collect();
 
         values.sort();
         if values.len() % 2 == 0 {
@@ -89,10 +89,10 @@ impl<E: Hash> CountMinSketch<E> {
     /// Merges another `CountMinSketch` into `self`.
     pub fn merge(&mut self, v: &CountMinSketch<E>) {
         self.counters = self.counters
-                            .iter()
-                            .zip(v.counters.iter())
-                            .map(|(s, o)| s.iter().zip(o.iter()).map(|(&a, &b)| a + b).collect())
-                            .collect()
+            .iter()
+            .zip(v.counters.iter())
+            .map(|(s, o)| s.iter().zip(o.iter()).map(|(&a, &b)| a + b).collect())
+            .collect()
     }
 }
 
@@ -153,8 +153,8 @@ mod test {
     fn accuracy() {
         let exp = Exp::new(2.0);
         let values: Vec<u32> = (0..1_000_000)
-                                   .map(|_| (exp.ind_sample(&mut thread_rng()) * 1000.0) as u32)
-                                   .collect();
+            .map(|_| (exp.ind_sample(&mut thread_rng()) * 1000.0) as u32)
+            .collect();
 
         let mut actual: HashMap<u32, u64> = HashMap::new();
         let mut cms = CountMinSketch::with_confidence(0.0001, 0.99);
