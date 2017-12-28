@@ -103,7 +103,7 @@ mod test {
     use std::collections::HashMap;
 
     use rand::thread_rng;
-    use rand::distributions::{IndependentSample, Exp};
+    use rand::distributions::{Exp, IndependentSample};
 
     #[test]
     fn with_confidence() {

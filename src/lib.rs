@@ -1,9 +1,9 @@
 //! Sketchy is a Rust library of probabilistic data structures, useful for measuring large or
 //! unbounded streams of data by trading some accuracy for a whole lot of efficiency.
 
+extern crate bit_vec;
 extern crate num;
 extern crate rand;
-extern crate bit_vec;
 
 mod bloomfilter;
 mod countmin;
