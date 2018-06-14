@@ -3,8 +3,6 @@ use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use std::marker::PhantomData;
 
-use num::Float;
-
 /// A `HyperLogLog` allows for space-efficient estimates of the cardinality of large multisets.
 ///
 /// ```
@@ -82,7 +80,7 @@ impl<E: Hash> HyperLogLog<E> {
         let e = self.alpha * self.msize.pow(2) as f64
             / self.m
                 .iter()
-                .map(|&x| (2.0).powf(-(x as f64)))
+                .map(|&x| (2.0_f64).powf(-(x as f64)))
                 .fold(0.0, |sum, x| sum + x);
         if e < (5 * self.msize) as f64 {
             estimate_bias(e, self.p)

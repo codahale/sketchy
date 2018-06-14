@@ -102,8 +102,8 @@ mod test {
 
     use std::collections::HashMap;
 
+    use rand::distributions::{Distribution, Exp};
     use rand::thread_rng;
-    use rand::distributions::{Exp, IndependentSample};
 
     #[test]
     fn with_confidence() {
@@ -153,7 +153,7 @@ mod test {
     fn accuracy() {
         let exp = Exp::new(2.0);
         let values: Vec<u32> = (0..1_000_000)
-            .map(|_| (exp.ind_sample(&mut thread_rng()) * 1000.0) as u32)
+            .map(|_| (exp.sample(&mut thread_rng()) * 1000.0) as u32)
             .collect();
 
         let mut actual: HashMap<u32, u64> = HashMap::new();

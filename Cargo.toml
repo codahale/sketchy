@@ -9,6 +9,12 @@ license = "Apache-2.0"
 repository = "https://github.com/codahale/sketchy"
 
 [dependencies]
-rand = "0.3"
-num = "0.1"
-bit-vec = "0.4"
+rand = "0.5"
+bit-vec = "0.5"
+
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "benches"
+harness = false

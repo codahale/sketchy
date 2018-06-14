@@ -2,7 +2,6 @@
 //! unbounded streams of data by trading some accuracy for a whole lot of efficiency.
 
 extern crate bit_vec;
-extern crate num;
 extern crate rand;
 
 mod bloomfilter;
