@@ -69,7 +69,7 @@ fn hll_insert(c: &mut Criterion) {
     let mut hll = HyperLogLog::new(0.05);
 
     c.bench_function("HyperLogLog::insert", move |b| {
-    b.iter(|| hll.insert(100u32))
+        b.iter(|| hll.insert(100u32))
     });
 }
 
@@ -77,7 +77,7 @@ fn res_insert(c: &mut Criterion) {
     let mut res = ReservoirSample::new(1000);
 
     c.bench_function("ReservoirSample::insert", move |b| {
-    b.iter(|| res.insert(100u32))
+        b.iter(|| res.insert(100u32))
     });
 }
 
@@ -85,9 +85,7 @@ fn topk_insert(c: &mut Criterion) {
     let cms = CountMinSketch::with_confidence(0.001, 0.99);
     let mut topk = TopK::new(5, 0.05, cms);
 
-    c.bench_function("TopK::insert", move |b| {
-    b.iter(|| topk.insert(100u32))
-    });
+    c.bench_function("TopK::insert", move |b| b.iter(|| topk.insert(100u32)));
 }
 
 criterion_group!(
@@ -104,4 +102,3 @@ criterion_group!(
     topk_insert
 );
 criterion_main!(benches);
-
